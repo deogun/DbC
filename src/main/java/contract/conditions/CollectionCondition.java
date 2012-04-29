@@ -22,8 +22,8 @@ class CollectionCondition implements Condition<Collection> {
     }
 
     private final Collection collection;
-
     private final EvaluationAction evaluationAction;
+
     public CollectionCondition(final Collection collection, final EVALUATION evaluation) {
         this(collection, evaluationActions.get(evaluation));
     }
