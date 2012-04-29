@@ -2,9 +2,9 @@ package contract.conditions;
 
 import java.util.Collection;
 
+import static contract.Contract.require;
 import static contract.Contract.requireNotNull;
-import static contract.conditions.CollectionCondition.EVALUATION.NOT_EMPTY;
-import static contract.conditions.CollectionCondition.EVALUATION.NO_NULL_ELEMENTS;
+import static contract.conditions.CollectionCondition.EVALUATION.*;
 
 public class ConditionFactory {
 
@@ -26,5 +26,11 @@ public class ConditionFactory {
     public static Condition<Collection> noNullElements(final Collection value) {
         requireNotNull(value);
         return new CollectionCondition(value, NO_NULL_ELEMENTS);
+    }
+
+    public static Condition<Collection> containsElement(final Object value, final Collection collection) {
+        requireNotNull(value);
+        requireNotNull(collection);
+        return new CollectionCondition(value, collection, CONTAINS_ELEMENT);
     }
 }
