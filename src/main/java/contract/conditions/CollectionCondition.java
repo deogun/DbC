@@ -8,6 +8,7 @@ import java.util.Map;
 import static contract.conditions.CollectionCondition.EVALUATION.CONTAINS_ELEMENT;
 import static contract.conditions.CollectionCondition.EVALUATION.NOT_EMPTY;
 import static contract.conditions.CollectionCondition.EVALUATION.NO_NULL_ELEMENTS;
+import static contract.conditions.NotNull.requireNotNull;
 import static java.util.Arrays.asList;
 
 class CollectionCondition implements Condition<Collection> {
@@ -33,8 +34,8 @@ class CollectionCondition implements Condition<Collection> {
     }
 
     private CollectionCondition(final Collection collection, final EvaluationAction evaluationAction) {
-        assert collection != null : "Collection cannot be null";
-        assert evaluationAction != null : "EvaluationAction cannot be null";
+        requireNotNull(collection);
+        requireNotNull(evaluationAction);
 
         this.evaluationAction = evaluationAction;
         this.collection = collection;
@@ -84,7 +85,7 @@ class CollectionCondition implements Condition<Collection> {
             @Override
             public Collection execute(final Collection collection) {
                 for(final Object element : collection) {
-                    assert element != null : "Unexpected NULL element found in collection";
+                    requireNotNull(element, "Unexpected NULL element found in collection");
                 }
                 return collection;
             }

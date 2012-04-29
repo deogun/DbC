@@ -3,7 +3,7 @@ package contract.conditions;
 import java.util.Collection;
 
 import static contract.Contract.require;
-import static contract.Contract.requireNotNull;
+import static contract.conditions.NotNull.*;
 import static contract.conditions.CollectionCondition.EVALUATION.*;
 
 public class ConditionFactory {

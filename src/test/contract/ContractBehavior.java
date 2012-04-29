@@ -1,16 +1,20 @@
 package contract;
 
 import contract.conditions.Condition;
-import contract.conditions.ConditionFactory;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
-import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import static contract.Contract.*;
+import java.util.List;
+
+import static contract.Contract.ensure;
+import static contract.Contract.require;
 import static contract.conditions.ConditionFactory.isTrue;
+import static contract.conditions.NotNull.ensureNotNull;
+import static contract.conditions.NotNull.requireNotNull;
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.fail;
 
 @RunWith(Theories.class)
@@ -63,6 +67,8 @@ public class ContractBehavior {
         final Boolean v1 = require(isTrue(1 == 1));
         final String v2 = ensureNotNull(new String("some string"));
         final Integer v3 = requireNotNull(new Integer(1));
+        final List<String> v4 = ensureNotNull(asList("1","2"), "some message");
+        final List<String> v5 = requireNotNull(asList("1","2"), "some message");
     }
 
     private interface ValidCondition<T> {
