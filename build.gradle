@@ -14,6 +14,9 @@ jar {
     manifest{
         attributes("Implementation-Title": "DbC", "Implementation-Version":"0.1", "Author":"Daniel Deogun")
     }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
+
+
 
 
