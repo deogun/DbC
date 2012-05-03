@@ -1,5 +1,6 @@
 package contract;
 
+import contract.conditions.BooleanCondition;
 import contract.conditions.Condition;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
@@ -11,7 +12,7 @@ import java.util.List;
 
 import static contract.Contract.ensure;
 import static contract.Contract.require;
-import static contract.conditions.ConditionFactory.isTrue;
+import static contract.conditions.BooleanCondition.isTrue;
 import static contract.conditions.NotNull.ensureNotNull;
 import static contract.conditions.NotNull.requireNotNull;
 import static java.util.Arrays.asList;

@@ -2,8 +2,8 @@ package contract.conditions;
 
 import org.junit.Test;
 
-import static contract.conditions.ConditionFactory.isFalse;
-import static contract.conditions.ConditionFactory.isTrue;
+import static contract.conditions.BooleanCondition.isFalse;
+import static contract.conditions.BooleanCondition.isTrue;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
