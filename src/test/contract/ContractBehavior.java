@@ -1,6 +1,7 @@
 package contract;
 
 import contract.conditions.BooleanCondition;
+import contract.conditions.CollectionCondition;
 import contract.conditions.Condition;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
@@ -8,11 +9,15 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import java.util.Collection;
 import java.util.List;
 
 import static contract.Contract.ensure;
 import static contract.Contract.require;
+import static contract.conditions.BooleanCondition.isFalse;
 import static contract.conditions.BooleanCondition.isTrue;
+import static contract.conditions.CollectionCondition.containsElement;
+import static contract.conditions.CollectionCondition.noNullElements;
 import static contract.conditions.NotNull.ensureNotNull;
 import static contract.conditions.NotNull.requireNotNull;
 import static java.util.Arrays.asList;
@@ -65,7 +70,8 @@ public class ContractBehavior {
 
     @Test
     public void shouldBePossibleToUseContractsInAssignments() {
-        final Boolean v1 = require(isTrue(1 == 1));
+        final Collection<String> v0 = ensure(containsElement("a", asList("aa", "a", "aaa")), noNullElements(asList("a","b")));
+        final Boolean v1 = require(isTrue(1 == 1), isFalse(1 == 2), isTrue(true), isFalse(false));
         final String v2 = ensureNotNull(new String("some string"));
         final Integer v3 = requireNotNull(new Integer(1));
         final List<String> v4 = ensureNotNull(asList("1","2"), "some message");
