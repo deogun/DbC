@@ -1,31 +1,46 @@
 package contract;
 
 
-import com.sun.deploy.util.ArrayUtil;
-import contract.conditions.Condition;
-import org.apache.commons.lang.ArrayUtils;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.AnyOf;
+import org.hamcrest.core.IsNull;
 
 import java.util.Arrays;
+import java.util.Collection;
 
-import static contract.conditions.NotNull.ensureNotNull;
-import static contract.conditions.NotNull.requireNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.AnyOf.anyOf;
+import static org.hamcrest.core.IsNot.not;
 
 
-public class Contract {
-    public static <T>T require(final Condition<T>... conditions) {
-        requireNotNull(conditions);
-        return evaluate(conditions);
+public final class Contract<T> {
+    private final T actual;
+
+    private Contract(final T actual) {
+        this.actual = actual;
     }
 
-    public static <T>T ensure(final Condition<T>... conditions) {
-        return require(conditions);
+    public static <T>Contract<T> requireThat(final T value) {
+        return new Contract<T>(value);
     }
 
-    private static <T>T evaluate(final Condition<T>... conditions) {
-        T result = null;
-        for(final Condition<T> condition : conditions) {
-            result = requireNotNull(condition).evaluate();
-        }
-        return ensureNotNull(result);
+    public static <T>Contract<T> ensureThat(final T value) {
+        return new Contract<T>(value);
+    }
+
+    public T satisfiesAllOf(final Matcher... matchers) {
+        assertThat(actual, allOf(matchers));
+        return actual;
+    }
+
+    public T satisfiesAnyOf(final Matcher... matchers) {
+        assertThat(actual, anyOf(matchers));
+        return actual;
+    }
+
+    public T satisfyNonOf(final Matcher... matchers) {
+        assertThat(actual, not(anyOf(matchers)));
+        return actual;
     }
 }

@@ -1,88 +1,99 @@
 package contract;
 
-import contract.conditions.BooleanCondition;
-import contract.conditions.CollectionCondition;
-import contract.conditions.Condition;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
-import org.junit.experimental.theories.DataPoint;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
 
 import java.util.Collection;
 import java.util.List;
 
-import static contract.Contract.ensure;
-import static contract.Contract.require;
-import static contract.conditions.BooleanCondition.isFalse;
-import static contract.conditions.BooleanCondition.isTrue;
-import static contract.conditions.CollectionCondition.containsElement;
-import static contract.conditions.CollectionCondition.noNullElements;
-import static contract.conditions.NotNull.ensureNotNull;
-import static contract.conditions.NotNull.requireNotNull;
+import static contract.Contract.ensureThat;
+import static contract.Contract.requireThat;
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.fail;
+import static java.util.Collections.EMPTY_LIST;
+import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.collection.IsIn.isIn;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
+import static org.hamcrest.text.IsEmptyString.isEmptyString;
 
-@RunWith(Theories.class)
 public class ContractBehavior {
-
-    @DataPoint
-    public static final ValidCondition valid = new ValidCondition() {
-        @Override
-        public Condition condition() {
-            return isTrue(1 == 1);
-        }
-    };
-
-    @DataPoint
-    public static final InvalidCondition invalid = new InvalidCondition() {
-        @Override
-        public Condition condition() {
-            return null;
-        }
-    };
-
-    @Theory
-    public void shouldAcceptNonNullConditions(final ValidCondition valid) {
-        require(valid.condition());
-        ensure(valid.condition());
-    }
-
-    @Theory
-    public void shouldNotBeAllowedToPassNullToRequireContract(final InvalidCondition invalid) {
-        try {
-            require(invalid.condition());
-        } catch (AssertionError e) {
-            return;
-        }
-        fail("Expected assertion error due to " + invalid.condition());
-    }
-
-    @Theory
-    public void shouldNotBeAllowedToPassNullToEnsureContract(final InvalidCondition invalid) {
-        try {
-            ensure(invalid.condition());
-        } catch (AssertionError e) {
-            return;
-        }
-        fail("Expected assertion error due to " + invalid.condition());
+    @Test
+    public void shouldSatisfyAllOf() {
+        requireThat(anyValidString()).satisfiesAllOf(notNullValue(String.class), not(isEmptyString()));
+        ensureThat(EMPTY_LIST).satisfiesAllOf(notNullValue(Collection.class), empty());
     }
 
     @Test
-    public void shouldBePossibleToUseContractsInAssignments() {
-        final Collection<String> v0 = ensure(containsElement("a", asList("aa", "a", "aaa")), noNullElements(asList("a","b")));
-        final Boolean v1 = require(isTrue(1 == 1), isFalse(1 == 2), isTrue(true), isFalse(false));
-        final String v2 = ensureNotNull(new String("some string"));
-        final Integer v3 = requireNotNull(new Integer(1));
-        final List<String> v4 = ensureNotNull(asList("1","2"), "some message");
-        final List<String> v5 = requireNotNull(asList("1","2"), "some message");
+    public void shouldSatisfyAnyOf() {
+        requireThat(anyNonEmptyList()).satisfiesAnyOf(empty(), not(empty()));
+        ensureThat(anyNonEmptyList()).satisfiesAnyOf(empty(), not(empty()));
     }
 
-    private interface ValidCondition<T> {
-        Condition<T> condition();
+    @Test
+    public void shouldNotSatisfyAnyOf() {
+        requireThat(new Double(1.3)).satisfyNonOf(isEmptyOrNullString(), isIn(asList(1.0,1.2,1.4)));
     }
 
-    private interface InvalidCondition {
-        Condition condition();
+    @Test
+    public void shouldSupportCustomizedMatcher() {
+        requireThat(new SomeCustomizedClass("42")).satisfiesAllOf(customizedMatcher("42"));
+    }
+
+    @Test
+    public void shouldSupportAssignment() {
+        final Integer a = requireThat(new Integer(42)).satisfiesAllOf(isIn(asList(1, 2, 42, 30)));
+        final Integer b = ensureThat(new Integer(42)).satisfiesAllOf(isIn(asList(1, 2, 42, 30)));
+        final Integer c = ensureThat(new Integer(42)).satisfyNonOf(isIn(asList(1, 2, 30)), instanceOf(Double.class));
+        final SomeCustomizedClass d = requireThat(new SomeCustomizedClass("x")).satisfiesAllOf(customizedMatcher("x"));
+
+        assertEquals(new Integer(42), a);
+        assertEquals(new Integer(42), b);
+        assertEquals(new Integer(42), c);
+        assertEquals("x", d.value);
+    }
+
+
+    private String anyValidString() {
+        return "some string";
+    }
+
+    private List<String> anyNonEmptyList() {
+        return asList("a","b");
+    }
+
+    private Matcher customizedMatcher(final String expectedValue) {
+        return new CustomizedMatcher(expectedValue);
+    }
+
+    private static final class CustomizedMatcher extends TypeSafeMatcher<SomeCustomizedClass> {
+
+        private final String expectedValue;
+
+        public CustomizedMatcher(final String expectedValue) {
+            this.expectedValue = expectedValue;
+        }
+
+        @Override
+        protected boolean matchesSafely(final SomeCustomizedClass item) {
+            return expectedValue.equals(item.value);
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            description.appendText("CustomizedMatcher");
+        }
+    }
+
+    private static final class SomeCustomizedClass {
+        public final String value;
+
+        public SomeCustomizedClass(final String value) {
+            this.value = value;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package contract.conditions;
+package contract.execution;
 
 public class NeverGetHere {
     public static void neverGetHere() {

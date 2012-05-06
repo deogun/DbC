@@ -1,8 +1,8 @@
-package contract.conditions;
+package contract.execution;
 
 import org.junit.Test;
 
-import static contract.conditions.NeverGetHere.neverGetHere;
+import static contract.execution.NeverGetHere.neverGetHere;
 
 public class NeverGetHereBehavior {
     @Test(expected = AssertionError.class)
