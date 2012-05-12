@@ -30,8 +30,8 @@ public class ContractBehavior {
 
     @Test
     public void shouldSatisfyAnyOf() {
-        requireThat(anyNonEmptyList()).satisfiesAnyOf(empty(), not(empty()));
-        ensureThat(anyNonEmptyList()).satisfiesAnyOf(empty(), not(empty()));
+        requireThat(anyNonEmptyList()).satisfiesAnyOf(instanceOf(Double.class), not(empty()));
+        ensureThat(anyNonEmptyList()).satisfiesAnyOf(instanceOf(Double.class), not(empty()));
     }
 
     @Test
