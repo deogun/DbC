@@ -7,13 +7,13 @@ import org.junit.runner.RunWith;
 
 import static contract.Contract.ensureThat;
 import static contract.Contract.requireThat;
-import static contract.matcher.IsValidEmailAddressMatcher.isValid;
+import static contract.matcher.ValidEmailAddress.isValidEmailAddress;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assume.assumeThat;
 
 @RunWith(Theories.class)
-public class IsValidEmailAddressMatcherBehavior {
+public class ValidEmailAddressBehavior {
     private interface Address { String address(); }
     private interface ValidAddress extends Address {}
     private interface InvalidAddress extends Address {}
@@ -40,16 +40,16 @@ public class IsValidEmailAddressMatcherBehavior {
     public void shouldBeValidAddress(final Address email) {
         assumeThat(email, instanceOf(ValidAddress.class));
 
-        requireThat(email.address()).satisfiesAllOf(isValid());
-        ensureThat(email.address()).satisfiesAllOf(isValid());
+        requireThat(email.address()).satisfiesAllOf(isValidEmailAddress());
+        ensureThat(email.address()).satisfiesAllOf(isValidEmailAddress());
     }
 
     @Theory
     public void shouldBeInvalidAddress(final Address email) {
         assumeThat(email, instanceOf(InvalidAddress.class));
 
-        requireThat(email.address()).satisfiesAllOf(not(isValid()));
-        ensureThat(email.address()).satisfiesAllOf(not(isValid()));
+        requireThat(email.address()).satisfiesAllOf(not(isValidEmailAddress()));
+        ensureThat(email.address()).satisfiesAllOf(not(isValidEmailAddress()));
     }
 
     private static Address validAddress(final String address) {

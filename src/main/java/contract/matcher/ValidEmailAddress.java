@@ -5,8 +5,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class IsValidEmailAddressMatcher {
-    public static Matcher isValid() {
+public class ValidEmailAddress {
+    public static Matcher isValidEmailAddress() {
         return new TypeSafeMatcher<String>() {
             @Override
             protected boolean matchesSafely(final String value) {
@@ -15,7 +15,7 @@ public class IsValidEmailAddressMatcher {
 
             @Override
             public void describeTo(final Description description) {
-                description.appendText("IsValidEmailAddressMatcher");
+                description.appendText("email address");
             }
         };
     }
