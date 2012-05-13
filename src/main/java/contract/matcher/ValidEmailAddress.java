@@ -6,7 +6,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public class ValidEmailAddress {
-    public static Matcher isValidEmailAddress() {
+    public static Matcher<String> isValidEmailAddress() {
         return new TypeSafeMatcher<String>() {
             @Override
             protected boolean matchesSafely(final String value) {
