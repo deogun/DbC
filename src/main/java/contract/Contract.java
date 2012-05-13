@@ -2,11 +2,6 @@ package contract;
 
 
 import org.hamcrest.Matcher;
-import org.hamcrest.core.AnyOf;
-import org.hamcrest.core.IsNull;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
@@ -29,16 +24,19 @@ public final class Contract<T> {
         return new Contract<T>(value);
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public T satisfiesAllOf(final Matcher... matchers) {
         assertThat(actual, allOf(matchers));
         return actual;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public T satisfiesAnyOf(final Matcher... matchers) {
         assertThat(actual, anyOf(matchers));
         return actual;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public T satisfyNonOf(final Matcher... matchers) {
         assertThat(actual, not(anyOf(matchers)));
         return actual;
