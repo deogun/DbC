@@ -35,6 +35,12 @@ public class ContractBehavior {
     }
 
     @Test
+    public void shouldProvideConvenienceMethodForReadability() {
+        requireThat(anyValidString()).satisfies(not(instanceOf(Integer.class)));
+        ensureThat(anyValidString()).satisfies(not(instanceOf(Integer.class)));
+    }
+
+    @Test
     public void shouldNotSatisfyAnyOf() {
         requireThat(new Double(1.3)).satisfyNonOf(isEmptyOrNullString(), isIn(asList(1.0,1.2,1.4)));
     }

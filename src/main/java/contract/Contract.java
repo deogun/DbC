@@ -41,4 +41,9 @@ public final class Contract<T> {
         assertThat(actual, not(anyOf(matchers)));
         return actual;
     }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public T satisfies(final Matcher matcher) {
+        return satisfiesAllOf(matcher);
+    }
 }
