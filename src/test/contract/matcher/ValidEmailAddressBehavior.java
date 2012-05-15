@@ -40,16 +40,16 @@ public class ValidEmailAddressBehavior {
     public void shouldBeValidAddress(final Address email) {
         assumeThat(email, instanceOf(ValidAddress.class));
 
-        requireThat(email.address()).satisfiesAllOf(isValidEmailAddress());
-        ensureThat(email.address()).satisfiesAllOf(isValidEmailAddress());
+        requireThat(email.address()).satisfies(isValidEmailAddress());
+        ensureThat(email.address()).satisfies(isValidEmailAddress());
     }
 
     @Theory
     public void shouldBeInvalidAddress(final Address email) {
         assumeThat(email, instanceOf(InvalidAddress.class));
 
-        requireThat(email.address()).satisfiesAllOf(not(isValidEmailAddress()));
-        ensureThat(email.address()).satisfiesAllOf(not(isValidEmailAddress()));
+        requireThat(email.address()).satisfies(not(isValidEmailAddress()));
+        ensureThat(email.address()).satisfies(not(isValidEmailAddress()));
     }
 
     private static Address validAddress(final String address) {

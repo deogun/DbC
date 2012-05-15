@@ -25,7 +25,7 @@ public final class Contract<T> {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public T satisfiesAllOf(final Matcher... matchers) {
+    public T satisfies(final Matcher... matchers) {
         assertThat(actual, allOf(matchers));
         return actual;
     }
@@ -40,10 +40,5 @@ public final class Contract<T> {
     public T satisfyNonOf(final Matcher... matchers) {
         assertThat(actual, not(anyOf(matchers)));
         return actual;
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public T satisfies(final Matcher matcher) {
-        return satisfiesAllOf(matcher);
     }
 }

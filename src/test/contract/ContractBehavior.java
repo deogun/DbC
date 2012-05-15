@@ -24,8 +24,8 @@ import static org.hamcrest.text.IsEmptyString.isEmptyString;
 public class ContractBehavior {
     @Test
     public void shouldSatisfyAllOf() {
-        requireThat(anyValidString()).satisfiesAllOf(notNullValue(String.class), not(isEmptyString()));
-        ensureThat(EMPTY_LIST).satisfiesAllOf(notNullValue(Collection.class), empty());
+        requireThat(anyValidString()).satisfies(notNullValue(String.class), not(isEmptyString()));
+        ensureThat(EMPTY_LIST).satisfies(notNullValue(Collection.class), empty());
     }
 
     @Test
@@ -47,15 +47,15 @@ public class ContractBehavior {
 
     @Test
     public void shouldSupportCustomizedMatcher() {
-        requireThat(new SomeCustomizedClass("42")).satisfiesAllOf(customizedMatcher("42"));
+        requireThat(new SomeCustomizedClass("42")).satisfies(customizedMatcher("42"));
     }
 
     @Test
     public void shouldSupportAssignment() {
-        final Integer a = requireThat(new Integer(42)).satisfiesAllOf(isIn(asList(1, 2, 42, 30)));
-        final Integer b = ensureThat(new Integer(42)).satisfiesAllOf(isIn(asList(1, 2, 42, 30)));
+        final Integer a = requireThat(new Integer(42)).satisfies(isIn(asList(1, 2, 42, 30)));
+        final Integer b = ensureThat(new Integer(42)).satisfies(isIn(asList(1, 2, 42, 30)));
         final Integer c = ensureThat(new Integer(42)).satisfyNonOf(isIn(asList(1, 2, 30)), instanceOf(Double.class));
-        final SomeCustomizedClass d = requireThat(new SomeCustomizedClass("x")).satisfiesAllOf(customizedMatcher("x"));
+        final SomeCustomizedClass d = requireThat(new SomeCustomizedClass("x")).satisfies(customizedMatcher("x"));
 
         assertEquals(new Integer(42), a);
         assertEquals(new Integer(42), b);
